@@ -1,0 +1,30 @@
+<header>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="styles/styles.css">
+</header>
+<head>
+  Welcome To Task Manager
+</head>
+<body>
+<form class="loginForm" action="/login" method="POST">
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div class="messageContainer">
+        {% for message in messages %}
+          <div class="subMessage">{{ message }}</div>
+        {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+    <div class="form-group">
+      <label>Already have an Account? Login:</label>
+        <input type="email" class="form-control" placeholder="Email" name="user" id="">
+        <input type="password" class="form-control" placeholder="Password" name="password" id="">
+        <div class="buttonContainer">
+          <input type="" class="btn btn-default" value="Sign up" name="register" id="SignUp" onclick="location.href='/register';">
+          <input type="submit" class="btn btn-default" value="Login" name="login" id="login">
+    
+        </div>
+      </div>    
+</form>
+</body>

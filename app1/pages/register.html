@@ -1,0 +1,28 @@
+<header>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="styles/styles.css">
+</header>
+<body>
+
+<form class="registerForm" action="/register" method="POST">
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul class=flashes>
+        {% for message in messages %}
+          <li>{{ message }}</li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+  
+  <div class="form-group">
+    <label>Stay on top of your schedule today</label>
+      <input type="email" class="form-control" placeholder="Email" name="email" id="email">
+      <input type="name" class="form-control" placeholder="Name" name="name" id="name">
+      <input type="password" class="form-control" placeholder="Password" name="password" id="password">
+      <div class="buttonContainer">
+        <input type="submit" class="btn btn-default" value="Register" name="register" id="register">
+      </div>
+    </div>    
+</form>
+</body>

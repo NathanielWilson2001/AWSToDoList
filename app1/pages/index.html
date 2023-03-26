@@ -1,0 +1,24 @@
+
+<header>
+	<link rel="stylesheet" href="styles/styles.css">
+
+  <nav>
+    {% if session.user %}
+      <div>
+      Welcome {{ session.user }}! <a href="/logout">logout</a>.
+      </div>
+    {% else %}
+    {% endif %}
+  </nav>
+</header>
+
+{% with tasks = get_flashed_messages() %}
+  {% if tasks %}
+    <div class="messageContainer">
+    {% for task in tasks %}
+      <div class="task">{{ task }}</div>
+    {% endfor %}
+    </div>s
+  {% else %}  
+  {% endif %}
+{% endwith %}
