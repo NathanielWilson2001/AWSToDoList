@@ -1,6 +1,6 @@
 import boto3
 
-accessKey =  ""
+accessKey = ""
 secretKey = ""
 sessToken = ""
 

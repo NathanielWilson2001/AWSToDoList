@@ -2,7 +2,7 @@
 import hashlib, boto3, json
 
 def lambda_handler(event, context):
-    accessKey =  ""
+    accessKey = ""
     secretKey = ""
     sessToken = ""
     

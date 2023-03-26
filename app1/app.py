@@ -4,9 +4,9 @@ import hashlib, boto3, json
 from boto3.dynamodb.conditions import Key, Attr
 from flask_session import Session 
 
-accessKey =  ""
-secretKey = ""
-sessToken = ""
+accessKey = "ASIA6AONFUCHBLYKOGCK"
+secretKey = "6UAUp6wV3vF4s3ZGSdg27hAJRqEWXiFmJL2C5SCN"
+sessToken = "FwoGZXIvYXdzEE4aDKs078noacgBKIPRrSLAAYfhPOa2Zl/eSZh4Q1CuypaSVuVycbpWX9a4+aaJSSrshXYdDpGg1m8s0dP+L6S8EZyPa/4ZHK/YJTQidoE4bhp/c2SeEEpEZTZCWRFhNl63zcrjrtSLcfFXPxCp4GEBESK4h/UcYVNge3n0f9+Ew0uJdGqQhPw/Z2l+Eexfx1HAzUH10NYN8kwIPvdDYQ8fwU4G2k7debp8+fId75q7cUMS0zk/j0SN6VHT3D41eXCsnSk+i8/IiSuiWQfADC+eLyi9+4ChBjItjxNmDS3pnb/twtPSFxwHiDptQFGHAi1iB+6DgCCWtLJSvMx2NKAdgn6Y3Wxe"
 
 sessionBoto = boto3.session.Session(
     aws_access_key_id=accessKey,
@@ -52,7 +52,7 @@ def login():
            session['user'] = user 
            return redirect("/")
         else:
-            flash("Invalid Email And/Or Password: Please Try Again")    
+            flash("Failure")    
     return render_template("login.html")
 
 @app.route("/register", methods=["POST", "GET"])
@@ -71,10 +71,10 @@ def register():
         answer = json.loads(answer)
         
         if(answer == "SUCCESS"):
-            flash("Your account was successfully created! You can now login")
+            flash("Success")
             return redirect("/login")
         else:
-            flash("An Error occured, please try again")     
+            flash("Failure")     
                       
     return render_template("register.html")
 

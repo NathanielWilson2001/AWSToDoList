@@ -1,27 +1,32 @@
 <header>
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
   <link rel="stylesheet" href="styles/styles.css">
 </header>
 <body>
 
-<form class="registerForm" action="/register" method="POST">
+<form class="registerForm" action="/register" method="POST">  
+  <div class="form-group">
     {% with messages = get_flashed_messages() %}
       {% if messages %}
-        <ul class=flashes>
+        <div class="messageContainer">
         {% for message in messages %}
-          <li>{{ message }}</li>
+           {% if message == "Failure" %} 
+            <div class='alert alert-danger alert-dismissible fade show'><button type='button' class='btn-close' data-bs-dismiss='alert'></button><strong>Failed to Register!</strong> Email and/or Password were invalid. An account may already exist with that email. Please try again</div>
+           {% endif %}
+           {% if message == "Success" %} 
+            <div class="alert alert-success alert-dismissible fade show"><button type="button" class="btn-close" data-bs-dismiss="alert"></button><strong>Success!</strong>You may now login with your new account!</div>
+          {% endif %}
         {% endfor %}
-        </ul>
+        </div>
       {% endif %}
     {% endwith %}
-  
-  <div class="form-group">
     <label>Stay on top of your schedule today</label>
       <input type="email" class="form-control" placeholder="Email" name="email" id="email">
       <input type="name" class="form-control" placeholder="Name" name="name" id="name">
       <input type="password" class="form-control" placeholder="Password" name="password" id="password">
       <div class="buttonContainer">
-        <input type="submit" class="btn btn-default" value="Register" name="register" id="register">
+        <input type="submit" class="btn btn-primary" value="Register" name="register" id="register">
       </div>
     </div>    
 </form>
