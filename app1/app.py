@@ -4,10 +4,9 @@ import hashlib, boto3, json
 from boto3.dynamodb.conditions import Key, Attr
 from flask_session import Session 
 
-accessKey = "ASIA6AONFUCHBLYKOGCK"
-secretKey = "6UAUp6wV3vF4s3ZGSdg27hAJRqEWXiFmJL2C5SCN"
-sessToken = "FwoGZXIvYXdzEE4aDKs078noacgBKIPRrSLAAYfhPOa2Zl/eSZh4Q1CuypaSVuVycbpWX9a4+aaJSSrshXYdDpGg1m8s0dP+L6S8EZyPa/4ZHK/YJTQidoE4bhp/c2SeEEpEZTZCWRFhNl63zcrjrtSLcfFXPxCp4GEBESK4h/UcYVNge3n0f9+Ew0uJdGqQhPw/Z2l+Eexfx1HAzUH10NYN8kwIPvdDYQ8fwU4G2k7debp8+fId75q7cUMS0zk/j0SN6VHT3D41eXCsnSk+i8/IiSuiWQfADC+eLyi9+4ChBjItjxNmDS3pnb/twtPSFxwHiDptQFGHAi1iB+6DgCCWtLJSvMx2NKAdgn6Y3Wxe"
-
+accessKey = ""
+secretKey = ""
+sessToken = ""
 sessionBoto = boto3.session.Session(
     aws_access_key_id=accessKey,
     aws_secret_access_key=secretKey,
@@ -28,6 +27,17 @@ def index():
     
     try:
         if session["user"]:
+            
+            # Grab User's current list of tasks 
+            table = dynamodb.Table('tasks')
+             
+            payload = {"Email" :  session["user"]}
+            response = lambdaConnection.invoke(FunctionName= "LambdaUsersTasks", InvocationType='RequestResponse', Payload=json.dumps(payload))
+            answer = response["Payload"].read()
+            answer = json.loads(answer)
+            
+            flash(answer)
+            
             return render_template("index.html")
         else:
             return redirect("/login")

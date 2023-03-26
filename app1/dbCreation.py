@@ -5,7 +5,7 @@ secretKey = ""
 sessToken = ""
 
 # Get the service resource.
-dynamodb = boto3.resource('dynamodb', aws_access_key_id= accessKey, aws_secret_access_key= secretKey, aws_session_token= sessToken)
+dynamodb = boto3.resource('dynamodb', aws_access_key_id= accessKey, aws_secret_access_key= secretKey, aws_session_token=sessToken)
 
 # Create the DynamoDB table.
 userTable = dynamodb.create_table(

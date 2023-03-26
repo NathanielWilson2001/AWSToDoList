@@ -17,10 +17,10 @@
   {% endif %}
   
 
-</body>
+
 {% with tasks = get_flashed_messages() %}
   {% if tasks %}
-    <div class="messageContainer">
+    <div class="container mt-5">
     {% for task in tasks %}
       <div class="task">{{ task }}</div>
     {% endfor %}
@@ -28,3 +28,4 @@
   {% else %}  
   {% endif %}
 {% endwith %}
+</body>
