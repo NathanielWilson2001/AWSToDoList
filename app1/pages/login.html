@@ -3,11 +3,9 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
   <link rel="stylesheet" href="styles/styles.css">
 </header>
-<head>
-  Welcome To Task Manager
-</head>
+
 <body>
-<form class="loginForm" action="/login" method="POST">
+<form class="loginForm was-validated" action="/login" method="POST">
   <div class="form-group">
     {% with messages = get_flashed_messages() %}
       {% if messages %}
@@ -25,8 +23,8 @@
     {% endwith %}
 
       <label>Already have an Account? Login:</label>
-        <input type="email" class="form-control" placeholder="Email" name="user" id="">
-        <input type="password" class="form-control" placeholder="Password" name="password" id="">
+        <input type="email" class="form-control" placeholder="Email" name="user" id="" required>
+        <input type="password" class="form-control" placeholder="Password" name="password" id="" required>
         <div class="buttonContainer">
           <input type="" class="btn btn-secondary" value="Sign up" name="register" id="SignUp" onclick="location.href='/register';">
           <input type="submit" class="btn btn-primary" value="Login" name="login" id="login">

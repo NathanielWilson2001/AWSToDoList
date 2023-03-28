@@ -12,20 +12,59 @@
             <h2>Welcome {{ session.user }}!</h2>
             <a href="/logout" class="btn btn-primary btn-lg" role="button">logout</a>
           </div>
+
+          <div class="container">
+              <div class="page-header">
+                <h1>Today's To-Do List<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal"><span>&#43;</span></button></h1>
+            
+                {% with tasks = get_flashed_messages() %}
+                  {% if tasks %}
+                    <div class="container mt-5">
+                    {% for task in tasks %}
+                      <div class="task">{{ task }}</div>
+                    {% endfor %}
+                    </div>
+                  {% else %}  
+                {% endif %}
+              {% endwith %}
+              </div>
+            </div>
         </div>
   {% else %}
   {% endif %}
   
 
+<!-- The Modal -->
+<div class="modal fade" id="myModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
 
-{% with tasks = get_flashed_messages() %}
-  {% if tasks %}
-    <div class="container mt-5">
-    {% for task in tasks %}
-      <div class="task">{{ task }}</div>
-    {% endfor %}
-    </div>s
-  {% else %}  
-  {% endif %}
-{% endwith %}
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+       <form id="addItem" class="addItem" action="/" method="POST">
+        <div class="form-outline">
+          <label>Stay on top of your schedule today</label>
+          <input type="name" class="form-control" placeholder="Title" name="name" id="name">
+          <textarea class="form-control" id="textArea" rows="4" placeholder="Add Description"></textarea>
+          
+          <input type = "date" name = "date">
+      </div>
+       </form>
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <div class="buttonContainer">
+          <input type="submit" class="btn btn-primary" value="Save" form="addItem" value="Update">
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
 </body>

@@ -60,3 +60,10 @@ header {
   height: 50px;
   margin-left: 1%;
 }
+
+.modal-header{
+  background-color: gray !important;
+}
+.addItem > .form-outline > input, textarea {
+  margin-bottom: 2% !important;
+}

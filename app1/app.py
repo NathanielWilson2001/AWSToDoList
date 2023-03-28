@@ -7,6 +7,7 @@ from flask_session import Session
 accessKey = ""
 secretKey = ""
 sessToken = ""
+
 sessionBoto = boto3.session.Session(
     aws_access_key_id=accessKey,
     aws_secret_access_key=secretKey,
@@ -22,7 +23,7 @@ app.config["SESSION_TYPE"] = "filesystem"
 
 Session(app)
 
-@app.route('/')
+@app.route('/', methods=["POST", "GET"])
 def index():
     
     try:
@@ -37,7 +38,10 @@ def index():
             answer = json.loads(answer)
             
             flash(answer)
-            
+            if request.method == "POST":
+                name = request.form.get('name')
+                flash(name)
+                return redirect("/")
             return render_template("index.html")
         else:
             return redirect("/login")
