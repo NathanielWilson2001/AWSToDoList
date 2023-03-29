@@ -1,9 +1,30 @@
-<header>
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-  <link rel="stylesheet" href="styles/styles.css">
-</header>
+<!DOCTYPE html>
+<html lang="en">
 <body>
+    <script defer src="css/scripts.js"></script>
+<!-- Header -->
+<head class="header">
+    <title>Task Manager</title>
+    <meta charset="utf-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+	  <link rel="stylesheet" href="styles/styles.css">
+
+    <header>
+        <!-- In Page Links -->
+        <nav class="navbar navbar-expand-sm bg-dark fixed-top">
+
+          <div class="container-fluid">
+            <!-- Links -->
+            <ul class="navbar-nav me-auto">
+              <li class="nav-item">
+                <h1>Task Manager</h1>
+              </li>
+            </ul>
+          </div>
+        </nav>
+    </header>   
+</head>
 
 <form class="registerForm" action="/register" method="POST">  
   <div class="form-group">
@@ -27,6 +48,7 @@
       <input type="password" class="form-control" placeholder="Password" name="password" id="password">
       <div class="buttonContainer">
         <input type="submit" class="btn btn-primary" value="Register" name="register" id="register">
+        <a href="/login" class="btn btn-secondary btn-lg" role="button" id="login">Back to Login</a>
       </div>
     </div>    
 </form>

@@ -1,13 +1,12 @@
 
-from flask import Flask, flash, redirect, request, session, render_template
+from flask import Flask, flash, redirect, request, session, render_template, Markup
 import hashlib, boto3, json
 from boto3.dynamodb.conditions import Key, Attr
 from flask_session import Session 
 
-accessKey = "ASIA6AONFUCHMRWW54UP"
-secretKey = "TvDdoDLBH1vFTTvKxKvsYTh7GQ45ynY0B2VCFJoF"
-sessToken = "FwoGZXIvYXdzEIH//////////wEaDBIPCT0K4tMcgw8lUyLAAahTAxgQhjsy37aZ6drn48Gqag41u1YHfSuXG+o9JyUplBBil7rgj5wHxpFHjbroD+emi1JVwxwVWykvWI5+Je8CTxoXFvXqkcQ6AI7i8uyhc2g+rNsJl6rwKOI4mJjrDOO4yYHyjUvu5/CMk2OD6siRFuHDY2Ns+LL91PFJMm4sfv9QZ+5QVC2rNOUbw4cF1UL0C6GdBZgLpf+EXvPZO8tCcLrF6/lkqa8Q4nFB8bllSltG6lAmJPVEnqWncrpWrCjuk4yhBjIt/qCMBFYBdWrmCDLAGouaMXi0Cyl13KlDMJNSipAtixYsJrot4QjI9eBqwz/B"
-
+accessKey = ""
+secretKey = ""
+sessToken = ""
 sessionBoto = boto3.session.Session(
     aws_access_key_id=accessKey,
     aws_secret_access_key=secretKey,
@@ -28,17 +27,22 @@ def index():
     try:
         if session["user"]:
             
-            # Grab User's current list of tasks 
-            table = dynamodb.Table('tasks')
-            
-            # Access current User data using Lambda Function LambdaUserTasks
+            # Grab User's account information
             payload = {"Email" :  session["user"]}
             response = lambdaConnection.invoke(FunctionName= "LambdaUsersTasks", InvocationType='RequestResponse', Payload=json.dumps(payload))
             answer = response["Payload"].read()
             answer = json.loads(answer)
             
-            flash(answer)
+            # Grab User's current list of tasks  using Lambda Function LambdaUserTasks
+            payload = {"Email" :  session["user"]}
+            response = lambdaConnection.invoke(FunctionName= "LambdaUsersTasks", InvocationType='RequestResponse', Payload=json.dumps(payload))
+            answer = response["Payload"].read()
+            answer = json.loads(answer)
             
+            for task in answer:
+                taskTile = Markup("<h3>" + task['taskName'] + "<button type='button' class='btn-close'></button></h3><hr><h5>Description:</h5><p>" + task['description'] + "</p>" + "<h5>Date:</h5><p>" + task['date'] + "</p>")
+                flash(taskTile)
+                            
             if request.method == "POST":
                 email  = session["user"]
                 name = request.form.get('name')
@@ -77,8 +81,9 @@ def login():
         answer = response["Payload"].read()
         answer = json.loads(answer)
         
-        if(answer == "SUCCESS"):
+        if(answer != "FAILURE" and answer != "Invalid Email or Password"):
            session['user'] = user 
+           session['name'] = answer
            return redirect("/")
         else:
             flash("Failure")    
@@ -110,6 +115,7 @@ def register():
 @app.route("/logout", methods=["POST", "GET"])
 def logout():
     session.clear()
+    Session(app)
     return redirect("/")
 
 if __name__=='__main__':

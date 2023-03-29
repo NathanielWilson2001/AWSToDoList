@@ -1,6 +1,5 @@
-
 import hashlib, boto3, json
-from boto3.dynamodb.conditions import Key, Attr
+
 
 def lambda_handler(event, context):
     accessKey = ""
@@ -14,16 +13,27 @@ def lambda_handler(event, context):
     date = event["Date"]
 
     dynamodb = boto3.resource('dynamodb', aws_access_key_id = accessKey, aws_secret_access_key = secretKey, aws_session_token = sessToken)
-    response = table.query(KeyConditionExpression=Key('email').eq(email), KeyConditionExpression=Key('taskName').eq(name))
-    
     table = dynamodb.Table('tasks')
-    response = table.put_item(
-        Item={
+    
+    response = table.get_item(
+             Key={
             'email': email,
-            'taskName' : name,
-            'description': description,
-            'date': date,
-            'complete': False
+            'taskName': name
             }
-        )  
-    return response
+        ) 
+    
+    try:
+        if(response["Item"] != None):
+            return "ALREADY EXISTS"
+
+    except:
+        response = table.put_item(
+            Item={
+                'email': email,
+                'taskName' : name,
+                'description': description,
+                'date': date,
+                'complete': False
+                }
+            )  
+        return response
