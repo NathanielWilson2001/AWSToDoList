@@ -1,12 +1,12 @@
 
 from flask import Flask, flash, redirect, request, session, render_template, Markup
 import hashlib, boto3, json
-from boto3.dynamodb.conditions import Key, Attr
 from flask_session import Session 
 
-accessKey = ""
-secretKey = ""
-sessToken = ""
+accessKey = "ASIA6AONFUCHHGCBWJ5O"
+secretKey = "Nh+9lSh3XPdQ6w50JvvyrOvNiKR0uMWvzW39K3sY"
+sessToken = "FwoGZXIvYXdzELP//////////wEaDPA0HwA6+k/Jm28LkiLAAedmQ9EQfvJaas152TBXvEtqYJh6ErwuExa7+XkMGjwgcOpwKp/muvzQ/UiTMNS3ZqwvRNqzpo7qOuB7ikK4pzDW7kLX4xBlyjmlWK8tUFxtmfuPA1JGO+g3U6hVtxSzf6mZ2EHcEgcAkGuZiYM1n3f0tScwDu0MRBa8Pw4bq48mOqZUy5MNX8BqXNeHViKtVFoKLjWMxUk9LQGijx8nt/9R77rPGs3cG7TOjK3Orn0XaraJmksGhLlgzizJkUNnFyj9gZehBjItoC1Qx9V22Sv3hEnUVli3EUpjyRMf2S3Albm4chkJE0W2hucWfXAwtfwBXtIj"
+
 sessionBoto = boto3.session.Session(
     aws_access_key_id=accessKey,
     aws_secret_access_key=secretKey,
@@ -40,7 +40,17 @@ def index():
             answer = json.loads(answer)
             
             for task in answer:
-                taskTile = Markup("<h3>" + task['taskName'] + "<button type='button' class='btn-close'></button></h3><hr><h5>Description:</h5><p>" + task['description'] + "</p>" + "<h5>Date:</h5><p>" + task['date'] + "</p>")
+                taskTile = Markup(
+                    "<h3>" + task['taskName'] + "<button type='button' class='btn-close'></button></h3><hr><h5>Description:</h5><p>" + task['description'] + "</p>" + "<h5>Date:</h5><p>" + task['date'] + "</p><hr><button type='button' class='btn btn' data-bs-toggle='modal' data-bs-target='#updateModal'><h5>Update&#43;</h5></button></h1></a>" +
+                    "<!-- The Modal --><div class='modal fade' id='updateModal'><div class='modal-dialog'><div class='modal-content'> <!-- Modal Header --><div class='modal-header'>" + 
+                    "<button type='button' class='btn-close' data-bs-dismiss='modal'></button></div><!-- Modal body --><div class='modal-body'><form id='addItem' class='addItem' action='/' method='POST'><div class='form-outline'><label>Stay on top of your schedule today</label>" +
+                    "<input type='name' class='form-control' value='" + task['taskName'] + 
+                    "'name='name' id='name' disabled><textarea form='addItem' class='form-control' name='description' id='description' rows='4' placeholder = '" + task['description'] + "'value='" + task['description'] + 
+                    "'></textarea><input type = 'date' name = 'date' value='" + task['date'] +
+                    "'></div> </form></div><!-- Modal footer --><div class='modal-footer'><div class='buttonContainer'><input type='submit' class='btn btn-primary' value='Update' form='addItem'></div></div></div></div></div>"
+                    )
+                
+                
                 flash(taskTile)
                             
             if request.method == "POST":

@@ -1,6 +1,6 @@
 body {
     display: fixed;
-    background:  #2B2D42;
+    background:  #212529;
     color: #212121;
     width: 100%;
     }
@@ -120,12 +120,12 @@ nav {
   color: white;
 }
 
-.page-header > h1 > button {
+.page-header > h1 > button, .list-group > a > button {
   float: right;
   align-self: center;
   background-color: #8D99AE;
 }
-.page-header > h1 > button:hover{
+.page-header > h1 > button:hover, .list-group > a > button:hover{
   border-color: #8D99AE;
   border-width: 2px;
 }
@@ -147,8 +147,8 @@ nav {
   margin-bottom: 2%;
   margin-top: 2%;
   color: white;
-  background-color: transparent;
-  border-color: #8D99AE;
+  background-color: transparent ;
+  border-color: white;
   border-width: 2px;
 }
 
