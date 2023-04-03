@@ -136,6 +136,10 @@ nav {
   margin-bottom: 2% !important;
 }
 
+.btn-close {
+  background-color: #8D99AE;
+}
+
 .list-group > a {
   margin-bottom: 2%;
   margin-top: 2%;
