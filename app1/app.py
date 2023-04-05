@@ -1,12 +1,11 @@
 
 from flask import Flask, flash, redirect, request, session, render_template, Markup
-import hashlib, boto3, json
+import hashlib, boto3, json, requests
 from flask_session import Session 
 
-accessKey =  ""
+accessKey = ""
 secretKey = ""
 sessToken = ""
-
 sessionBoto = boto3.session.Session(
     aws_access_key_id=accessKey,
     aws_secret_access_key=secretKey,
@@ -15,6 +14,7 @@ sessionBoto = boto3.session.Session(
 
 dynamodb = boto3.resource('dynamodb', aws_access_key_id= accessKey, aws_secret_access_key=secretKey, aws_session_token=sessToken)
 lambdaConnection = boto3.client('lambda',  region_name= "us-east-1", aws_access_key_id=accessKey,aws_secret_access_key=secretKey, aws_session_token=sessToken)
+kmsKey =  boto3.client('kms',  region_name= "us-east-1", aws_access_key_id=accessKey,aws_secret_access_key=secretKey, aws_session_token=sessToken)
     
 app = Flask(__name__, template_folder='pages', static_folder='styles')
 app.config["SESSION_PERMANENT"] = False
@@ -24,11 +24,9 @@ Session(app)
 
 @app.route('/', methods=["POST", "GET"])
 def index():
-
+    
     try:
         if session["user"]:
-        
-
             # Grab User's current list of tasks  using Lambda Function LambdaUserTasks
             payload = {"Email" :  session["user"]}
             response = lambdaConnection.invoke(FunctionName= "LambdaUsersTasks", InvocationType='RequestResponse', Payload=json.dumps(payload))
@@ -42,8 +40,8 @@ def index():
                     "<!-- The Modal --><div class='modal fade' id='updateModal" + str(counter) +"'><div class='modal-dialog'><div class='modal-content'> <!-- Modal Header --><div class='modal-header'>" + 
                     "<button type='button' class='btn-close' data-bs-dismiss='modal'></button></div><!-- Modal body --><div class='modal-body'><form id='updateItem" +  str(counter) +  "' class='addItem' action='/?type=Update&number=" +  str(counter) +  "'method='POST'><div class='form-outline'>" +
                     "<input type='name' class='form-control' value='" + task['taskName'] + 
-                    "'name='updateName" +  str(counter) +  "' id='updateName" +  str(counter) + "' readonly>"+ task['taskName']+"</input><textarea form='updateItem"+  str(counter) +  "' class='form-control' name='updateDescription" +  str(counter) +  "' id='updateDescription" +  str(counter) +  "' rows='4' placeholder = '" + task['description'] + "'value='" + task['description'] + 
-                    "'></textarea><input type = 'date' name = 'updateDate" +  str(counter) +  "' value='" + task['finishDate'] +
+                    "'name='updateName" +  str(counter) +  "' id='updateName" +  str(counter) + "' readonly></input><textarea form='updateItem"+  str(counter) +  "' class='form-control' name='updateDescription" +  str(counter) +  "' id='updateDescription" +  str(counter) +  "' rows='4' placeholder = '" + task['description'] + "'value='" + task['description'] + 
+                    "'>"+task['description']+"</textarea>" +"<input type = 'date' name = 'updateDate" +  str(counter) +  "' value='" + task['finishDate'] +
                     "'></div> </form></div><!-- Modal footer --><div class='modal-footer'><div class='buttonContainer'><input type='submit' class='btn btn-primary' value='Update' form='updateItem" +  str(counter) +  "'></div></div></div></div></div>"
                     )
                 counter += 1
@@ -100,13 +98,13 @@ def login():
         
         # Pass data to Lambda Function 
         payload = {"Email" : user, "Password" : password}
-        response = lambdaConnection.invoke(FunctionName= "lamLoginTest", InvocationType='RequestResponse', Payload=json.dumps(payload))
-        answer = response["Payload"].read()
-        answer = json.loads(answer)
-        
-        if(answer != "FAILURE" and answer != "Invalid Email or Password"):
+        answer =  requests.post("https://jszojsq1lb.execute-api.us-east-1.amazonaws.com/Login/login", json=payload)
+    
+    
+        if(json.loads(answer.text)['body-json']['Success'] == "true"):
+          
            session['user'] = user 
-           session['name'] = answer
+           session['name'] = json.loads(answer.text)['body-json']['Name']
            return redirect("/")
         else:
             flash("Failure")    
@@ -123,10 +121,12 @@ def register():
         
         # Pass data to Lambda Function 
         payload = {"Email" : email, "Password" : password, "Name" : name}
+     
+
         response = lambdaConnection.invoke(FunctionName= "LambdaRegistration", InvocationType='RequestResponse', Payload=json.dumps(payload))
         answer = response["Payload"].read()
         answer = json.loads(answer)
-        
+    
         if(answer == "SUCCESS"):
             flash("Success")
             return redirect("/login")
