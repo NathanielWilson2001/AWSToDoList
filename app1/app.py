@@ -6,6 +6,7 @@ from flask_session import Session
 accessKey = ""
 secretKey = ""
 sessToken = ""
+
 sessionBoto = boto3.session.Session(
     aws_access_key_id=accessKey,
     aws_secret_access_key=secretKey,
@@ -96,7 +97,7 @@ def login():
         password = password.encode()
         password = hashlib.md5(password).hexdigest()
         
-        # Pass data to Lambda Function 
+        # Pass data to Lambda Function via the API Gateway 
         payload = {"Email" : user, "Password" : password}
         answer =  requests.post("https://jszojsq1lb.execute-api.us-east-1.amazonaws.com/Login/login", json=payload)
     
@@ -122,17 +123,16 @@ def register():
         # Pass data to Lambda Function 
         payload = {"Email" : email, "Password" : password, "Name" : name}
      
-
-        response = lambdaConnection.invoke(FunctionName= "LambdaRegistration", InvocationType='RequestResponse', Payload=json.dumps(payload))
-        answer = response["Payload"].read()
-        answer = json.loads(answer)
     
-        if(answer == "SUCCESS"):
+        answer =  requests.post("https://jszojsq1lb.execute-api.us-east-1.amazonaws.com/Login/reg", json=payload)
+       
+
+        if(json.loads(answer.text)['Success'] == "true"):
             flash("Success")
             return redirect("/login")
         else:
-            flash("Failure")     
-                      
+            flash("Failure")      
+                
     return render_template("register.html")
 
 @app.route("/logout", methods=["POST", "GET"])
