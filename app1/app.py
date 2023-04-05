@@ -6,7 +6,6 @@ from flask_session import Session
 accessKey = ""
 secretKey = ""
 sessToken = ""
-
 sessionBoto = boto3.session.Session(
     aws_access_key_id=accessKey,
     aws_secret_access_key=secretKey,
@@ -73,12 +72,10 @@ def index():
                     name = request.form.get('updateName' + request.args.get("number"))
                     description = request.form.get('updateDescription' + request.args.get("number"))
                     date = request.form.get("updateDate" + request.args.get("number"))
+                    
                     # Send form data to the Add Task Lambda function
                     payload = {"Email" : email, "Name" : name, "Description": description, "Date": date }
-                    response = lambdaConnection.invoke(FunctionName= "UpdateItem", InvocationType='RequestResponse', Payload=json.dumps(payload))
-                    answer = response["Payload"].read()
-                    answer = json.loads(answer)
-            
+                    answer =  requests.post("https://jszojsq1lb.execute-api.us-east-1.amazonaws.com/Login/update", json=payload)
                     session.pop('_flashes', None)
                     return redirect("/")
                    
