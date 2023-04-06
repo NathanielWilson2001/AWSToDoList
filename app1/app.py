@@ -27,11 +27,12 @@ def index():
     
     try:
         if session["user"]:
+            
+           
             # Grab User's current list of tasks  using Lambda Function LambdaUserTasks
             payload = {"Email" :  session["user"]}
-            response = lambdaConnection.invoke(FunctionName= "LambdaUsersTasks", InvocationType='RequestResponse', Payload=json.dumps(payload))
-            answer = response["Payload"].read()
-            answer = json.loads(answer)
+            answer =  requests.post("https://jszojsq1lb.execute-api.us-east-1.amazonaws.com/Login/gettasks", json=payload)
+            answer = json.loads(answer.text)['body-json']
             
             counter = 0
             for task in answer:
@@ -55,13 +56,11 @@ def index():
                     description = request.form.get('description')
                     date = request.form.get("date")
                     payload = {"Email" : email, "Name" : name, "Description": description, "Date": date }
-                    response = lambdaConnection.invoke(FunctionName= "AddTasks", InvocationType='RequestResponse', Payload=json.dumps(payload))
-                    answer = response["Payload"].read()
-                    answer = json.loads(answer)
+                    answer =  requests.post("https://jszojsq1lb.execute-api.us-east-1.amazonaws.com/Login/add", json=payload)
             
-                    if(answer == "ALREADY EXISTS"):
+                    if(json.loads(answer.text)['Success'] == "ALREADY EXISTS"):
                         session.pop('_flashes', None)
-                        flash(answer)
+                        flash("ALREADY EXISTS")
                         return redirect("/")
                     else:    
                         session.pop('_flashes', None)
@@ -73,7 +72,7 @@ def index():
                     description = request.form.get('updateDescription' + request.args.get("number"))
                     date = request.form.get("updateDate" + request.args.get("number"))
                     
-                    # Send form data to the Add Task Lambda function
+                    # Send form data to the API gateway which connects to the Lambda function
                     payload = {"Email" : email, "Name" : name, "Description": description, "Date": date }
                     answer =  requests.post("https://jszojsq1lb.execute-api.us-east-1.amazonaws.com/Login/update", json=payload)
                     session.pop('_flashes', None)
