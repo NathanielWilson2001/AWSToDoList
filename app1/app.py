@@ -36,14 +36,25 @@ def index():
             
             counter = 0
             for task in answer:
+
                 taskTile = Markup(
-                    "<h3>" + task['taskName'] + "<button type='button' class='btn-close'></button></h3><hr><h5>Description:</h5><p>" + task['description'] + "</p>" + "<h5>Date:</h5><p>" + task['finishDate'] + "</p><hr><button type='button' class='btn btn' data-bs-toggle='modal' data-bs-target='#updateModal" + str(counter) +"'><h5>Update&#43;</h5></button></h1></a>" +
+                    # To do list item task tile
+                    "<h3>" + task['taskName'] + "<button type='button' class='btn-close' data-bs-toggle='modal' data-bs-target='#deleteModal" + str(counter) +"'></button></h3><hr><h5>Description:</h5><p>" + task['description'] + "</p>" + "<h5>Date:</h5><p>" + task['finishDate'] + "</p><hr><button type='button' class='btn btn' data-bs-toggle='modal' data-bs-target='#updateModal" + str(counter) +"'><h5>Update&#43;</h5></button></h1></a>" +
+                    # Modal for updating the Item
                     "<!-- The Modal --><div class='modal fade' id='updateModal" + str(counter) +"'><div class='modal-dialog'><div class='modal-content'> <!-- Modal Header --><div class='modal-header'>" + 
                     "<button type='button' class='btn-close' data-bs-dismiss='modal'></button></div><!-- Modal body --><div class='modal-body'><form id='updateItem" +  str(counter) +  "' class='addItem' action='/?type=Update&number=" +  str(counter) +  "'method='POST'><div class='form-outline'>" +
                     "<input type='name' class='form-control' value='" + task['taskName'] + 
                     "'name='updateName" +  str(counter) +  "' id='updateName" +  str(counter) + "' readonly></input><textarea form='updateItem"+  str(counter) +  "' class='form-control' name='updateDescription" +  str(counter) +  "' id='updateDescription" +  str(counter) +  "' rows='4' placeholder = '" + task['description'] + "'value='" + task['description'] + 
                     "'>"+task['description']+"</textarea>" +"<input type = 'date' name = 'updateDate" +  str(counter) +  "' value='" + task['finishDate'] +
-                    "'></div> </form></div><!-- Modal footer --><div class='modal-footer'><div class='buttonContainer'><input type='submit' class='btn btn-primary' value='Update' form='updateItem" +  str(counter) +  "'></div></div></div></div></div>"
+                    "'></div> </form></div><!-- Modal footer --><div class='modal-footer'><div class='buttonContainer'><input type='submit' class='btn btn-primary' value='Update' form='updateItem" +  str(counter) +  "'></div></div></div></div></div>"+
+                    # Delete Item Modal
+                    "<!-- The Modal --><div class='modal fade' id='deleteModal" + str(counter) +"'><div class='modal-dialog'><div class='modal-content'> <!-- Modal Header --><div class='modal-header'>" + 
+                    "<button type='button' class='btn-close' data-bs-dismiss='modal'></button></div><!-- Modal body --><div class='modal-body'><form id='deleteItem" +  str(counter) +  "' class='deleteItem' action='/?type=Delete&number=" +  str(counter) + "'method='POST'><div class='form-outline'>" +
+                    "<h3>Delete:</h3><input type='name' class='form-control' value='" + task['taskName'] + 
+                    "'name='deleteName" +  str(counter) +  "' id='deleteName" +  str(counter) + "' readonly></form></div><!-- Modal footer --><div class='modal-footer'><div class='buttonContainer'><input type='submit' class='btn btn-primary' value='Delete' form='deleteItem" +  str(counter) +  "'></div></div></div></div></div></div>"
+                    
+                    
+                    
                     )
                 counter += 1
                 flash(taskTile)
@@ -77,6 +88,16 @@ def index():
                     answer =  requests.post("https://jszojsq1lb.execute-api.us-east-1.amazonaws.com/Login/update", json=payload)
                     session.pop('_flashes', None)
                     return redirect("/")
+                
+                if request.args.get("type") == "Delete":
+                    email  = session["user"]
+                    name = request.form.get('deleteName' + request.args.get("number"))
+
+                    # Send form data to the API gateway which connects to the Lambda function
+                    payload = {"Email" : email, "Name" : name}
+                    answer = requests.post("https://jszojsq1lb.execute-api.us-east-1.amazonaws.com/Login/delete", json=payload)
+                    session.pop('_flashes', None)
+                    return redirect("/")
                    
                      
         else:
@@ -85,6 +106,20 @@ def index():
         return redirect("/login")
     return render_template("index.html")
 
+
+@app.route('/delete', methods=["POST"])
+def delete():
+    if request.method == "POST":
+        taskName = request.args.get("task")
+        email  = session["user"]
+        payload = {"Email" : email, "Name" : taskName}
+        answer = requests.post("https://jszojsq1lb.execute-api.us-east-1.amazonaws.com/Login/delete", json=payload)
+        session.pop('_flashes', None)
+        flash(answer)
+   
+    return redirect("/")
+        
+    
 @app.route("/login", methods=["POST", "GET"])
 def login():
     if request.method == "POST":
@@ -107,7 +142,7 @@ def login():
             flash("Failure")    
     return render_template("login.html")
 
-@app.route("/register", methods=["POST", "GET"])
+@app.route("/register",methods=["POST", "GET"])
 def register():
     if request.method == "POST":
         email = request.form.get("email")
