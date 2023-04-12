@@ -1,21 +1,9 @@
 
 from flask import Flask, flash, redirect, request, session, render_template, Markup
-import hashlib, boto3, json, requests
+import hashlib, json, requests
 from flask_session import Session 
 
-accessKey = ""
-secretKey = ""
-sessToken = ""
-sessionBoto = boto3.session.Session(
-    aws_access_key_id=accessKey,
-    aws_secret_access_key=secretKey,
-    aws_session_token=sessToken,
-)
-
-dynamodb = boto3.resource('dynamodb', aws_access_key_id= accessKey, aws_secret_access_key=secretKey, aws_session_token=sessToken)
-lambdaConnection = boto3.client('lambda',  region_name= "us-east-1", aws_access_key_id=accessKey,aws_secret_access_key=secretKey, aws_session_token=sessToken)
-kmsKey =  boto3.client('kms',  region_name= "us-east-1", aws_access_key_id=accessKey,aws_secret_access_key=secretKey, aws_session_token=sessToken)
-    
+ 
 app = Flask(__name__, template_folder='pages', static_folder='styles')
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
@@ -28,7 +16,6 @@ def index():
     try:
         if session["user"]:
             
-           
             # Grab User's current list of tasks  using Lambda Function LambdaUserTasks
             payload = {"Email" :  session["user"]}
             answer =  requests.post("https://jszojsq1lb.execute-api.us-east-1.amazonaws.com/Login/gettasks", json=payload)
@@ -41,17 +28,17 @@ def index():
                     # To do list item task tile
                     "<h3>" + task['taskName'] + "<button type='button' class='btn-close' data-bs-toggle='modal' data-bs-target='#deleteModal" + str(counter) +"'></button></h3><hr><h5>Description:</h5><p>" + task['description'] + "</p>" + "<h5>Date:</h5><p>" + task['finishDate'] + "</p><hr><button type='button' class='btn btn' data-bs-toggle='modal' data-bs-target='#updateModal" + str(counter) +"'><h5>Update&#43;</h5></button></h1></a>" +
                     # Modal for updating the Item
-                    "<!-- The Modal --><div class='modal fade' id='updateModal" + str(counter) +"'><div class='modal-dialog'><div class='modal-content'> <!-- Modal Header --><div class='modal-header'>" + 
-                    "<button type='button' class='btn-close' data-bs-dismiss='modal'></button></div><!-- Modal body --><div class='modal-body'><form id='updateItem" +  str(counter) +  "' class='addItem' action='/?type=Update&number=" +  str(counter) +  "'method='POST'><div class='form-outline'>" +
-                    "<input type='name' class='form-control' value='" + task['taskName'] + 
+                    "<div class='modal fade' id='updateModal" + str(counter) +"'><div class='modal-dialog modal-lg'><div class='modal-content'><div class='modal-header'>" + 
+                    "<button type='button' class='btn-close' data-bs-dismiss='modal'></button></div><div class='modal-body'><form id='updateItem" +  str(counter) +  "' class='addItem' action='/?type=Update&number=" +  str(counter) +  "'method='POST'><div class='form-outline'>" +
+                    "<input type='name' class='form-control disabledName' value='" + task['taskName'] + 
                     "'name='updateName" +  str(counter) +  "' id='updateName" +  str(counter) + "' readonly></input><textarea form='updateItem"+  str(counter) +  "' class='form-control' name='updateDescription" +  str(counter) +  "' id='updateDescription" +  str(counter) +  "' rows='4' placeholder = '" + task['description'] + "'value='" + task['description'] + 
                     "'>"+task['description']+"</textarea>" +"<input type = 'date' name = 'updateDate" +  str(counter) +  "' value='" + task['finishDate'] +
-                    "'></div> </form></div><!-- Modal footer --><div class='modal-footer'><div class='buttonContainer'><input type='submit' class='btn btn-primary' value='Update' form='updateItem" +  str(counter) +  "'></div></div></div></div></div>"+
+                    "'></div></form></div><div class='modal-footer'><div class='buttonContainer'><input type='submit' class='btn btn-primary update' value='Update&#43;' form='updateItem" +  str(counter) +  "'></div></div></div></div></div>"+
                     # Delete Item Modal
-                    "<!-- The Modal --><div class='modal fade' id='deleteModal" + str(counter) +"'><div class='modal-dialog'><div class='modal-content'> <!-- Modal Header --><div class='modal-header'>" + 
-                    "<button type='button' class='btn-close' data-bs-dismiss='modal'></button></div><!-- Modal body --><div class='modal-body'><form id='deleteItem" +  str(counter) +  "' class='deleteItem' action='/?type=Delete&number=" +  str(counter) + "'method='POST'><div class='form-outline'>" +
-                    "<h3>Delete:</h3><input type='name' class='form-control' value='" + task['taskName'] + 
-                    "'name='deleteName" +  str(counter) +  "' id='deleteName" +  str(counter) + "' readonly></form></div><!-- Modal footer --><div class='modal-footer'><div class='buttonContainer'><input type='submit' class='btn btn-primary' value='Delete' form='deleteItem" +  str(counter) +  "'></div></div></div></div></div></div>"
+                    "<div class='modal fade' id='deleteModal" + str(counter) +"'><div class='modal-dialog'><div class='modal-content'><div class='modal-header'>" + 
+                    "<button type='button' class='btn-close' data-bs-dismiss='modal'></button></div><div class='modal-body'><form id='deleteItem" +  str(counter) +  "' class='deleteItem' action='/?type=Delete&number=" +  str(counter) + "'method='POST'><div class='form-outline'>" +
+                    "<h3>Would you like to delete:</h3><input type='name' class='form-control disabledName' value='" + task['taskName'] + 
+                    "'name='deleteName" +  str(counter) +  "' id='deleteName" +  str(counter) + "' readonly></form></div><div class='modal-footer'><div class='buttonContainer'><input type='submit' class='btn btn-primary delete'  value='Delete' form='deleteItem" +  str(counter) +  "'></div></div></div></div></div></div>"
                     
                     
                     
@@ -130,8 +117,8 @@ def login():
         
         # Pass data to Lambda Function via the API Gateway 
         payload = {"Email" : user, "Password" : password}
-        answer =  requests.post("https://jszojsq1lb.execute-api.us-east-1.amazonaws.com/Login/login", json=payload)
-    
+        answer =  requests.post("https://jszojsq1lb.execute-api.us-east-1.amazonaws.com/Login/login",  json=payload)
+        print(answer.text)
     
         if(json.loads(answer.text)['body-json']['Success'] == "true"):
           

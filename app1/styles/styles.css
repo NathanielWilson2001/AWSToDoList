@@ -1,16 +1,20 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+
+
+
 body {
     display: fixed;
-    background:  #212529;
-    color: #212121;
+    background:  #F2F2F2;
     width: 100%;
-    }
+    font-family: 'Inter', sans-serif;
+}
 
 header {
   height: 50px;
 
 }
 nav {
- background-color: #8D99AE;
+ background-color: #2E2E2E;
  color: white;
 }
 
@@ -28,8 +32,8 @@ nav {
   align-self: center;
   text-align: center;
   width: 35%;
-  margin-left: 15.5%;
-  margin-right: 37.5%;
+  margin-left: 28%;
+  margin-right: 30%;
   margin-top: 5%;
 }
 
@@ -37,7 +41,7 @@ nav {
     font-size: x-large;
  }
 .form-group {
-  background-color: #8D99AE; ;
+  background-color: #2E2E2E; ;
   color: white;
   border-radius: 6px;
   width: 130%;
@@ -58,21 +62,35 @@ nav {
   column-gap: 1%;
   height: 50px;
 }
-.loginForm > div > .buttonContainer > #login, .loginForm > div > .buttonContainer > #SignUp {
+.loginForm > div > .buttonContainer > #login {
   margin: .5%;
   height: 100%;
   width: 100%;
-  background-color: #2B2D42 !important;
+  background-color: #007FFF  !important;
   color: white;
   font-size: larger;
   font-style: bold;
  }
-
- .loginForm > div > .buttonContainer > #login:hover, .loginForm > div > .buttonContainer > #SignUp:hover {
+ .loginForm > div > .buttonContainer > #SignUp {
+  margin: .5%;
+  height: 100%;
+  width: 100%;
+  background-color:  #FF4500   !important;
+  color: white;
+  font-size: larger;
+  font-style: bold;
+ }
+ .loginForm > div > .buttonContainer > #login:hover {
   background-color: transparent !important;
-  border-color: #2B2D42;
+  border-color: #007FFF;
   border-width: 2px;
-  color: #2B2D42;
+  font-size: larger;
+  font-weight: 500;
+ }
+ .loginForm > div > .buttonContainer > #SignUp:hover {
+  background-color: transparent !important;
+  border-color: #FF4500;
+  border-width: 2px;
   font-size: larger;
   font-weight: 500;
  }
@@ -83,29 +101,63 @@ nav {
   grid-template-columns: 100%;
   column-gap: 1%;
 }
-.registerForm > div > .buttonContainer > #register, .registerForm > div > .buttonContainer > #login {
+.registerForm > div > .buttonContainer > #register{
   width: 100%;
   height: 50px;
   margin-left: 1%;
   margin-bottom: 10px;
   border-color: transparent;
-  background-color: #2B2D42 !important;
+  background-color: #007FFF !important;
   color: white;
   font-size: larger;
   font-style: bold;
 }
-.registerForm > div > .buttonContainer > #register:hover, .registerForm > div > .buttonContainer > #login:hover {
+.registerForm > div > .buttonContainer > #register:hover {
   background-color: transparent !important;
-  border-color: #2B2D42;
+  border-color: #007FFF;
   border-width: 2px;
-  color: #2B2D42;
+  font-size: larger;
+  font-weight: 500;
+}
+.registerForm > div > .buttonContainer > #login {
+  width: 100%;
+  height: 50px;
+  margin-left: 1%;
+  margin-bottom: 10px;
+  border-color: transparent;
+  background-color: #FF4500 !important;
+  color: white;
+  font-size: larger;
+  font-style: bold;
+}
+.registerForm > div > .buttonContainer > #login:hover {
+  background-color: transparent !important;
+  border-color: #FF4500 ;
+  border-width: 2px;
   font-size: larger;
   font-weight: 500;
 }
 
 #jumboTronWelcome {
-  background-color:#8D99AE!important; 
+  position: relative;
+  background-color:#2E2E2E!important; 
   margin-top: 5% !important;
+}
+#jumboTronWelcome > h2 > div {
+  display: inline;
+}
+#jumboTronWelcome > h2 > a {
+  float: right;
+  background-color: #FF4500;
+  border-color: #FF4500;
+}
+
+#jumboTronWelcome > h2 > a:hover {
+  float: right;
+  background-color: transparent;
+  border-color: #FF4500;
+  border-width: 2px;
+  font-weight: 700;
 }
 .page-header {
   margin-top: 5%;
@@ -113,47 +165,65 @@ nav {
 .page-header > h1{
   width: 100%;
   position: relative;
-  color: white;
+  color: #2E2E2E;
 }
 
 .page-header > hr {
-  color: white;
+  background-color: #2E2E2E;
+  opacity: .8;
+  height: 2px;
 }
 
 .page-header > h1 > button, .list-group > a > button {
   float: right;
   align-self: center;
-  background-color: #8D99AE;
+  background-color: #007FFF;
+  color: white;
 }
 .page-header > h1 > button:hover, .list-group > a > button:hover{
-  border-color: #8D99AE;
+  border-color: #007FFF;
   border-width: 2px;
+  
 }
+.modal{
+  background-color: rgba(255, 255, 255, .8);
+}
+
 .modal-header{
-  background-color: #8D99AE !important;
+  background-color: #2E2E2E !important;
+  border-radius: 0%;
+  color: white;
+}
+.modal-content{
+  background-color: #F2F2F2;
+  border-color: #2E2E2E;
+  border-width: 2px;
+  font-weight: 600;
+}
+.modal-header > button {
+  background-color: #FF4500;
+  opacity: 1;
 }
 .addItem > .form-outline > input, textarea {
   margin-bottom: 2% !important;
 }
 
-.btn-close {
-  background-color: #8D99AE;
-}
-
 .list-group > a {
   margin-bottom: 2%;
   margin-top: 2%;
-  color: #212121;
-  background-color: #F5F8FA ;
+  color: white;
+  background-color: #2E2E2E;
+  font-size: larger;
+  border-radius: 10px;
 }
 
 .list-group > a:hover {
-  margin-bottom: 2%;
-  margin-top: 2%;
-  color: white;
-  background-color: transparent ;
-  border-color: white;
+  background-color: transparent;
+  color: #2E2E2E;
+  border-color: #2E2E2E;
   border-width: 2px;
+  font-weight: 600;
+
 }
 
 .list-group > a > h3 {
@@ -161,6 +231,7 @@ nav {
   font-style: italic;
   border-bottom: 1px;
   width: 100%;
+  opacity: 1;
 
 }
 .list-group > h3 > label{
@@ -168,4 +239,47 @@ nav {
 }
 .list-group > a > h3 > button{
   float: right;
+  background-color: #FF4500;
+  opacity: 1;
+  color: white !important;
+}
+.list-group > a > h3 > button:hover, .list-group > a > h3 > button:focus, .modal-header > button:hover{
+  border: 2px solid #FF4500;
+  color: #FF4500;
+  background-color: #F2F2F2;
+  opacity: 1;
+  
+}
+
+
+#Save, .update {
+  background-color: #007FFF;
+  border-color: #007FFF;
+}
+.delete {
+  background-color: #FF4500;
+  border-color: #FF4500;
+}
+#Save:hover, .update:hover {
+  background-color: transparent;
+  border-color: #007FFF;
+  border-width: 2px;
+  color: #2E2E2E;
+  font-weight: 700;
+}
+.delete:hover {
+  background-color: transparent;
+  border-color: #FF4500;
+  border-width: 2px;
+  color: #2E2E2E;
+  font-weight: 700;
+}
+
+.disabledName, .disabledName:focus {
+  background-color: #2E2E2E;
+  color: white;
+  box-shadow: none;
+  font-size: larger;
+  font-weight: 600;
+  cursor: default;
 }

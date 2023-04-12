@@ -27,13 +27,12 @@
 {% if session.user %}
         <div class="container mt-3">
           <div class="mt-4 p-5 bg-primary text-white rounded" id="jumboTronWelcome">
-            <h2>Welcome {{ session.name }}!</h2>
-            <a href="/logout" class="btn btn-primary btn-lg" role="button">logout</a>
+            <h2>Welcome <div style="font-style: italic;">{{ session.name }}!</div>
+            <a href="/logout" class="btn btn-primary btn-lg" role="button">Logout</a> </h2>
           </div>
-
           <div class="container">
               <div class="page-header">
-                <h1>Today's To-Do List<button type="button" class="btn btn" data-bs-toggle="modal" data-bs-target="#myModal"><h5>Create&#43;</h5></button></h1>
+                <h1>Today's To-Do List<button type="button" class="btn btn" data-bs-toggle="modal" data-bs-target="#create"><h5>Create&#43;</h5></button></h1>
                 <hr>
               </div>
             
@@ -53,32 +52,25 @@
   {% endif %}
   
 
-<!-- The Modal -->
-<div class="modal fade" id="myModal">
-  <div class="modal-dialog">
+<div class="modal fade" id="create">
+  <div class="modal-dialog modal-lg">
     <div class="modal-content">
-
-      <!-- Modal Header -->
       <div class="modal-header">
+        <label>Stay on top of your schedule today</label>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
-
-      <!-- Modal body -->
       <div class="modal-body">
        <form id="addItem" class="addItem" action="/?type=Add" method="POST">
         <div class="form-outline">
-          <label>Stay on top of your schedule today</label>
           <input type="name" class="form-control" placeholder="Title" name="name" id="name">
           <textarea form="addItem" class="form-control" name="description" id="description" rows="4" placeholder="Add Description"></textarea>
           <input type = "date" name = "date">
       </div>
        </form>
       </div>
-
-      <!-- Modal footer -->
       <div class="modal-footer">
         <div class="buttonContainer">
-          <input type="submit" class="btn btn-primary" value="Save" form="addItem" value="Update">
+          <input type="submit" class="btn btn-primary" value="Save&#43;" id="Save" form="addItem" value="Update">
         </div>
       </div>
 

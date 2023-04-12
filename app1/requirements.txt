@@ -1,4 +1,4 @@
-FLASK==2.0.2
+FLASK==2.2.2
 Flask-Session==0.4.0
-php==1.2.1
 requests==2.28.2
+boto3==1.26.77
